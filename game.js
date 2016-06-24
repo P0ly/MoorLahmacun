@@ -3,7 +3,6 @@
 
   Copyright by Timo Häfner
 */
-"use strict";
 
 //  ######  ######## ######## ######## #### ##    ##  ######    ######
 // ##    ## ##          ##       ##     ##  ###   ## ##    ##  ##    ##
@@ -18,8 +17,11 @@ var ups = 30;
 var devmode = true;
 var buschimode = false;
 var time = 20;
-var targets = 0;
-var bushes = 10;
+var targets = 5;
+var bushes = 50;
+var bushSpawn = 2000;
+var maxRadius = 30;
+var minRadius = 20;
 
 // ui
 var font = 'monospace';
@@ -53,23 +55,6 @@ buschipic.src = 'img/buschi.png';
 var tsarr = [];
 var bsarr = [];
 var stateTypes = ['game','menu'];
-
-// generated objects //
-for(var i = 0; i < targets; i++) {
-  tsarr[i] = new Target(100,100+50*i,getRandom(20,30),buschipic,0);
-}
-var t = new Target(100,100,25,buschipic);
-var bStart = new Button(canvas.width-fontSize*'Play'.length,fontSize,'Play','play');
-
-function play() {
-  state = 1;
-
-  score = 0;
-  timer = time;
-  timerID = window.setInterval(function() {
-    timer--;
-  },1000);
-}
 
 
 //   ######   ##        #######  ########     ###    ##          ######## ##     ## ##    ##  ######
@@ -153,21 +138,18 @@ Target.prototype.draw = function() {
 
 Target.prototype.update = function() {
 
-  if(mouse && inGameView()) {
-
-    if(clicked && getDistance(mouseX,mouseY,t.x,t.y) < this.radius) {
+    if(
+      mouse && inGameView() && clicked &&
+      getDistance(mouseX,mouseY,this.x,this.y) <= this.radius
+    ) {
       score++;
-      t.placeRandom();
-    } else if(clicked && getDistance(mouseX,mouseY,t.x,t.y) > this.radius) {
-      score--;
+      this.placeRandom();
     }
-
-  }
 
 };
 
 Target.prototype.placeRandom = function() {
-  this.radius = getRandom(30,40);
+  this.radius = getRandom(maxRadius,40);
   this.x = getRandom(canvas.width-this.radius,this.radius);
   this.y = getRandom(canvas.height-this.radius,this.radius+fontSize+padding*3);
 };
@@ -191,16 +173,25 @@ function Bush(x, y, radius, color) {
 }
 
 Bush.prototype.draw = function() {
-  ctx.fillStyle = 'white';
-  ctx.beginPath();
-  ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
-  ctx.fill();
-  ctx.fillStyle = 'green';
-  ctx.beginPath();
-  ctx.arc(this.x,this.y,this.radius/2,0,Math.PI*2,true);
-  ctx.fill();
+  if(this.show) {
+    ctx.fillStyle = 'darkgreen';
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
+    ctx.fill();
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.radius*0.9,0,Math.PI*2,true);
+    ctx.fill();
+  }
 };
 
+// Bush.prototype.update = function(id) {
+//   if(getDistance(mouseX,mouseY,this.x,this.y) <= this.radius && mouse && clicked) {
+//     this.show = false;
+//     score++;
+//     window.setTimeout(bsarr[i].show = true, bushSpawn);
+//   }
+// };
 
 // ########  ##     ## ######## ########  #######  ##    ##
 // ##     ## ##     ##    ##       ##    ##     ## ###   ##
@@ -212,7 +203,7 @@ Bush.prototype.draw = function() {
 
 function Button(x,y,text,func) {
   this.text = text;
-  this.func = func; // function-name as a string!
+  this.func = func;
   this.x = x;
   this.y = y;
   this.width = (fontSize*this.text.length*0.9);
@@ -251,7 +242,7 @@ Button.prototype.update = function() {
     1,
     1
   ) && mouse && clicked) {
-    window[this.func]();
+    this.func();
   }
 };
 
@@ -315,8 +306,11 @@ var render = [
     for(var i = 0; i < tsarr.length; i++) {
       tsarr[i].draw();
     }
-    t.draw();
+    for(var i = 0; i < bsarr.length; i++) {
+      bsarr[i].draw();
+    }
 
+    // t.draw();
     // bStart.draw();
 
   }
@@ -334,45 +328,53 @@ var render = [
 var update = [
   // menu
   function() {
-    // start();
-    // timerID = window.setInterval(function() {
-    //   timer--;
-    // },1000);
-    // timer = time;
-    // score = 0;
-    // bStart.text = 'Restart';
-    // bStart.func = 'restart';
-    // bStart.reCal();
 
     bStart.update();
+
   },
   // game
   function() {
 
-    t.update();
+    for(var i = 0; i < tsarr.length; i++) {
+      tsarr[i].update();
+    }
+
+    if(
+      mouse && inGameView() && clicked &&
+      getDistance(mouseX,mouseY,this.x,this.y) > this.radius
+    ) {
+      score--;
+    }
+
+    // for(var i = 0; i < bsarr.length; i++) {
+    //   bsarr[i].update(i);
+    // }
+    // t.update();
 
     // stop
     if(timer <= 0) {
+
       // stop();
       window.clearInterval(timerID);
       // window.clearTimeout(loopID);
       state = 0;
       clicked = false; // fix -1 point on start bug
-      // bStart.text = 'Play';
-      // bStart.func = 'start';
-      // bStart.reCal();
+
     }
 
   }
 ];
 
 function updateInput() {
+
   if(mouse && clicked) {
     clicked = false;
   }
+
   if(!mouse && !clicked) {
     clicked = true;
   }
+
 }
 
 
@@ -406,7 +408,7 @@ function loop() {
     ctx.fillText('Y: ' + mouseY,5,fontSize+padding*3+fontSize*0.8+35);
     ctx.fillText('Mouse: ' + mouse,5,fontSize+padding*3+fontSize*0.8+45);
     ctx.fillText('Clicked: ' + clicked,5,fontSize+padding*3+fontSize*0.8+55);
-    ctx.fillText('Hit: ' + getDistance(mouseX,mouseY,t.x,t.y),5,fontSize+padding*3+fontSize*0.8+65);
+    // ctx.fillText('Hit: ' + getDistance(mouseX,mouseY,t.x,t.y),5,fontSize+padding*3+fontSize*0.8+65);
   }
 
   frame++;
@@ -414,38 +416,6 @@ function loop() {
   window.requestAnimationFrame(loop);
 
 }
-
-// start
-// function start() {
-//
-//   timerID = window.setInterval(function() {
-//     timer--;
-//   },1000);
-//   timer = time;
-//   score = 0;
-//   state = 1;
-//   bStart.text = 'Restart';
-//   bStart.func = 'restart';
-//   bStart.reCal();
-//
-//   loop();
-//
-// }
-
-// stop
-// function stop() {
-//
-//   window.clearInterval(timerID);
-//   // window.clearTimeout(loopID);
-//   state = 0;
-//   clicked = false; // fix -1 point on start bug
-//   bStart.text = 'Play';
-//   bStart.func = 'start';
-//   bStart.reCal();
-//
-//   loop();
-//
-// }
 
 // function restart() {
 //   stop();
@@ -461,21 +431,21 @@ function loop() {
 // ##        ##  ##    ##    ##    ##       ##   ### ##       ##    ##  ##    ##
 // ######## ####  ######     ##    ######## ##    ## ######## ##     ##  ######
 
-function checkKeyDown(e) {
-    var keyID = e.keyCode || e.which;
-    if (keyID === 32) { // Space
-        // input.space = true;
-        e.preventDefault();
-    }
-}
-
-function checkKeyUp(e) {
-    var keyID = e.keyCode || e.which;
-    if (keyID === 32) { // Space
-        // input.space = false;
-        e.preventDefault();
-    }
-}
+// function checkKeyDown(e) {
+//     var keyID = e.keyCode || e.which;
+//     if (keyID === 32) { // Space
+//         // input.space = true;
+//         e.preventDefault();
+//     }
+// }
+//
+// function checkKeyUp(e) {
+//     var keyID = e.keyCode || e.which;
+//     if (keyID === 32) { // Space
+//         // input.space = false;
+//         e.preventDefault();
+//     }
+// }
 
 function updateMouseCoordinates(e) {
     mouseX = e.pageX-canvas.offsetLeft;
@@ -488,5 +458,48 @@ canvas.addEventListener('mousedown', function() { mouse = true; }, false);
 canvas.addEventListener('mouseup', function() { mouse = false; }, false);
 canvas.addEventListener('mousemove', updateMouseCoordinates, false);
 
+
+//  ######   ######## ##    ##     #######  ########        ##  ######
+// ##    ##  ##       ###   ##    ##     ## ##     ##       ## ##    ##
+// ##        ##       ####  ##    ##     ## ##     ##       ## ##
+// ##   #### ######   ## ## ##    ##     ## ########        ##  ######
+// ##    ##  ##       ##  ####    ##     ## ##     ## ##    ##       ##
+// ##    ##  ##       ##   ###    ##     ## ##     ## ##    ## ##    ##
+//  ######   ######## ##    ##     #######  ########   ######   ######
+
+for(var i = 0; i < targets; i++) {
+  tsarr[i] = new Target(
+    getRandom(maxRadius,canvas.width-maxRadius),
+    getRandom(maxRadius+fontSize+padding*3,canvas.height-maxRadius),
+    getRandom(minRadius,maxRadius),
+    buschipic,0
+  );
+}
+
+for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
+  if(i*maxRadius % canvas.width == 100) {
+    w = 0;
+    r++;
+  }
+  bsarr[i] = new Bush(
+    w*maxRadius,
+    canvas.height-minRadius*r,
+    getRandom(minRadius,maxRadius),
+    'green'
+  );
+}
+
+//var t = new Target(100,100,25,buschipic);
+var bStart = new Button(canvas.width-fontSize*'Play'.length,fontSize,'Play',function() {
+
+  state = 1;
+
+  score = 0;
+  timer = time;
+  timerID = window.setInterval(function() {
+    timer--;
+  },1000);
+
+});
 
 loop(); // start
