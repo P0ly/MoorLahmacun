@@ -55,6 +55,7 @@ buschipic.src = 'img/buschi.png';
 var tsarr = [];
 var bsarr = [];
 var stateTypes = ['game','menu'];
+var lag = 0, lagStart = 0;
 
 
 //   ######   ##        #######  ########     ###    ##          ######## ##     ## ##    ##  ######
@@ -86,6 +87,10 @@ function isAABBC(x1,y1,w1,h1,x2,y2,w2,h2) {
 function inGameView() {
   if(mouseY > fontSize+padding*3) return true;
   return false;
+}
+
+function addInput(x,y,text,type,canvas,func) {
+  // TODO insert input-tag
 }
 
 // ########    ###    ########   ######   ######## ########
@@ -283,8 +288,13 @@ var render = [
       t.placeRandom();
     }
 
-    drawUI();
+    // render bushes
+    for(var i = 0; i < bsarr.length; i++) {
+      bsarr[i].draw();
+    }
 
+    // render ui
+    drawUI();
     ctx.fillStyle = color;
     ctx.fillRect(0,canvas.height/2-fontSize*1.3,canvas.width,fontSize*1.3+padding*3);
     ctx.fillStyle = fontColor;
@@ -294,7 +304,6 @@ var render = [
       padding,
       canvas.height/2+padding
     );
-
     bStart.draw();
 
   },
@@ -303,9 +312,12 @@ var render = [
 
     drawUI();
 
+    // render targets
     for(var i = 0; i < tsarr.length; i++) {
       tsarr[i].draw();
     }
+
+    // render bushes
     for(var i = 0; i < bsarr.length; i++) {
       bsarr[i].draw();
     }
@@ -335,10 +347,12 @@ var update = [
   // game
   function() {
 
+    // update targets
     for(var i = 0; i < tsarr.length; i++) {
       tsarr[i].update();
     }
 
+    // get -1 point if user fails to hit target
     if(
       mouse && inGameView() && clicked &&
       getDistance(mouseX,mouseY,this.x,this.y) > this.radius
@@ -354,7 +368,6 @@ var update = [
     // stop
     if(timer <= 0) {
 
-      // stop();
       window.clearInterval(timerID);
       // window.clearTimeout(loopID);
       state = 0;
@@ -367,11 +380,11 @@ var update = [
 
 function updateInput() {
 
-  if(mouse && clicked) {
+  if(mouse) {
     clicked = false;
   }
 
-  if(!mouse && !clicked) {
+  if(!mouse) {
     clicked = true;
   }
 
@@ -388,8 +401,14 @@ function updateInput() {
 
 updateID = window.setInterval(function() {
 
+  // lag calculation
+  lagStart = Date.now();
+
   update[state]();
   updateInput();
+
+  // lag calculation
+  lag = Date.now() - lagStart;
 
 },1000/ups);
 
@@ -399,6 +418,7 @@ function loop() {
   render[state]();
 
   if(devmode) {
+
     // dev text
     ctx.fillStyle = 'blue';
     ctx.font = fontSize*0.8 + 'px ' + font;
@@ -408,7 +428,8 @@ function loop() {
     ctx.fillText('Y: ' + mouseY,5,fontSize+padding*3+fontSize*0.8+35);
     ctx.fillText('Mouse: ' + mouse,5,fontSize+padding*3+fontSize*0.8+45);
     ctx.fillText('Clicked: ' + clicked,5,fontSize+padding*3+fontSize*0.8+55);
-    // ctx.fillText('Hit: ' + getDistance(mouseX,mouseY,t.x,t.y),5,fontSize+padding*3+fontSize*0.8+65);
+    ctx.fillText('Lag: ' + lag + ' ms',5,fontSize+padding*3+fontSize*0.8+65);
+
   }
 
   frame++;
@@ -431,6 +452,12 @@ function loop() {
 // ##        ##  ##    ##    ##    ##       ##   ### ##       ##    ##  ##    ##
 // ######## ####  ######     ##    ######## ##    ## ######## ##     ##  ######
 
+// document.addEventListener('keydown', checkKeyDown, false);
+// document.addEventListener('keyup', checkKeyUp, false);
+canvas.addEventListener('mousedown', function() { mouse = true; }, false);
+canvas.addEventListener('mouseup', function() { mouse = false; }, false);
+canvas.addEventListener('mousemove', updateMouseCoordinates, false);
+
 // function checkKeyDown(e) {
 //     var keyID = e.keyCode || e.which;
 //     if (keyID === 32) { // Space
@@ -452,12 +479,6 @@ function updateMouseCoordinates(e) {
     mouseY = e.pageY-canvas.offsetTop;
 }
 
-// document.addEventListener('keydown', checkKeyDown, false);
-// document.addEventListener('keyup', checkKeyUp, false);
-canvas.addEventListener('mousedown', function() { mouse = true; }, false);
-canvas.addEventListener('mouseup', function() { mouse = false; }, false);
-canvas.addEventListener('mousemove', updateMouseCoordinates, false);
-
 
 //  ######   ######## ##    ##     #######  ########        ##  ######
 // ##    ##  ##       ###   ##    ##     ## ##     ##       ## ##    ##
@@ -467,6 +488,7 @@ canvas.addEventListener('mousemove', updateMouseCoordinates, false);
 // ##    ##  ##       ##   ###    ##     ## ##     ## ##    ## ##    ##
 //  ######   ######## ##    ##     #######  ########   ######   ######
 
+// targets
 for(var i = 0; i < targets; i++) {
   tsarr[i] = new Target(
     getRandom(maxRadius,canvas.width-maxRadius),
@@ -476,6 +498,7 @@ for(var i = 0; i < targets; i++) {
   );
 }
 
+// bushes
 for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
   if(i*maxRadius % canvas.width == 100) {
     w = 0;
@@ -484,7 +507,7 @@ for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
   bsarr[i] = new Bush(
     w*maxRadius,
     canvas.height-minRadius*r,
-    getRandom(minRadius,maxRadius),
+    getRandom(minRadius*1.2,maxRadius),
     'green'
   );
 }
