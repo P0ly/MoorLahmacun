@@ -15,7 +15,7 @@
 // game mechanic
 var ups = 30;
 var devmode = true;
-var buschimode = false;
+var buschimode = true;
 var time = 20;
 var targets = 5;
 var bushes = 50;
@@ -284,8 +284,8 @@ var render = [
 
     if(buschimode) {
       ctx.drawImage(buschipic,0,0,canvas.width,canvas.height);
-      t.draw();
-      t.placeRandom();
+      tsarr[0].draw();
+      tsarr[0].placeRandom();
     }
 
     // render bushes
@@ -420,7 +420,7 @@ function loop() {
   if(devmode) {
 
     // dev text
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = 'red';
     ctx.font = fontSize*0.8 + 'px ' + font;
     ctx.fillText('FPS: ' + fps,5,fontSize+padding*3+25);
     ctx.font = fontSize*0.5 + 'px ' + font;
