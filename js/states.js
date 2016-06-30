@@ -18,6 +18,9 @@ var states = {
 
       bStart.update();
 
+      // update target
+      tsarr[flyTargets].update();
+
     },
 
     // GAME
@@ -25,6 +28,11 @@ var states = {
 
       // update targets
       for(var i = 0; i < tsarr.length; i++) {
+        if(tsarr[i].isHit()) {
+          score++;
+          tsarr[i].place();
+        }
+
         tsarr[i].update();
       }
 
@@ -36,18 +44,18 @@ var states = {
         score--;
       }
 
-      // for(var i = 0; i < bsarr.length; i++) {
-      //   bsarr[i].update(i);
-      // }
-      // t.update();
-
       // stop
       if(timer <= 0) {
 
         window.clearInterval(timerID);
-        // window.clearTimeout(loopID);
         state = 0;
         clicked = false; // fix -1 point on start bug
+
+        // reset targets
+        for(var i = 0; i < tsarr.length; i++) {
+          tsarr[i].place();
+        }
+
 
       }
 
@@ -62,9 +70,10 @@ var states = {
 
       if(buschimode) {
         ctx.drawImage(buschipic,0,0,canvas.width,canvas.height);
-        // tsarr[0].draw();
-        // tsarr[0].placeRandom();
       }
+
+      // render target
+      tsarr[flyTargets].draw();
 
       // render bushes
       for(var i = 0; i < bsarr.length; i++) {
@@ -88,6 +97,10 @@ var states = {
     // GAME
     function() {
 
+      if(buschimode) {
+        ctx.drawImage(buschipic,0,0,canvas.width,canvas.height);
+      }
+
       // render targets
       for(var i = 0; i < tsarr.length; i++) {
         tsarr[i].draw();
@@ -97,9 +110,6 @@ var states = {
       for(var i = 0; i < bsarr.length; i++) {
         bsarr[i].draw();
       }
-
-      // t.draw();
-      // bStart.draw();
 
     }
 

@@ -7,13 +7,23 @@
 // GENERATE OBJS
 
 // targets
-for(var i = 0; i < targets; i++) {
-  tsarr[i] = new Target(
-    getRandom(maxRadius,canvas.width-maxRadius),
-    getRandom(maxRadius+fontSize+padding*3,canvas.height-maxRadius),
-    getRandom(minRadius,maxRadius),
-    buschipic,0
-  );
+// for(var i = 0; i < targets; i++) {
+//   tsarr[i] = new Target(
+//     getRandom(maxRadius,canvas.width-maxRadius),
+//     getRandom(maxRadius+fontSize+padding*3,canvas.height-maxRadius),
+//     getRandom(minRadius,maxRadius),
+//     buschipic,0
+//   );
+// }
+
+for(var i = 0; i < flyTargets; i++) {
+  tsarr[i] = new FlyTarget();
+  tsarr[i].place();
+}
+
+for(var i = flyTargets; i < hideTargets+flyTargets; i++) {
+  tsarr[i] = new HideTarget();
+  tsarr[i].place();
 }
 
 // bushes
@@ -34,7 +44,7 @@ for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
   );
 }
 
-//var t = new Target(100,100,25,buschipic);
+// play-button
 var bStart = new Button(canvas.width-fontSize*'Play'.length,fontSize,'Play',function() {
 
   state = 1;

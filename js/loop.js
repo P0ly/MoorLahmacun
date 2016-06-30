@@ -64,12 +64,9 @@ var updateID = window.setInterval(function() {
   }
 
   frame++;
-  // loopID = window.setTimeout(loop,1000/ups);
+
   window.requestAnimationFrame(render);
 
 })();
 
-// function restart() {
-//   stop();
-//   start();
-// }
+// TODO restart?

@@ -6,15 +6,17 @@
 
 // TARGET
 
-function Target(x, y, radius, img, type) {
-  this.x = x;
-  this.y = y;
+var Target = function() {
+  this.x = 0;
+  this.y = 0;
   this.vy = 0;
   this.vx = 0;
-  this.radius = radius;
-  this.img = img;
-  this.type = type;
-}
+  this.radius = getRandom(minRadius,maxRadius);
+  this.img = buschipic;
+  this.speed = targetSpeed;
+  this.alive = true; // TODO die animation
+  // this.placeRandom();
+};
 
 Target.prototype.draw = function() {
 
@@ -48,20 +50,75 @@ Target.prototype.draw = function() {
 
 };
 
-Target.prototype.update = function() {
+Target.prototype.isHit = function() {
 
     if(
       mouse && inGameView() && clicked &&
       getDistance(mouseX,mouseY,this.x,this.y) <= this.radius
     ) {
-      score++;
-      this.placeRandom();
+      this.alve = false;
+      return true;
     }
+    return false;
 
 };
 
-Target.prototype.placeRandom = function() {
-  this.radius = getRandom(maxRadius,40);
-  this.x = getRandom(canvas.width-this.radius,this.radius);
-  this.y = getRandom(canvas.height-this.radius,this.radius+fontSize+padding*3);
+// Target.prototype.placeRandom = function() {
+//   // this.radius = getRandom(maxRadius,40);
+//   this.x = getRandom(canvas.width-this.radius,this.radius);
+//   this.y = getRandom(canvas.height-this.radius,this.radius+fontSize+padding*3);
+// };
+
+
+var FlyTarget = function() {};
+FlyTarget.prototype = new Target();
+
+FlyTarget.prototype.update = function() {
+
+  if(this.x-this.radius > canvas.width) this.place();
+
+  this.x += this.vx;
+  this.y += this.vy;
+
+};
+
+FlyTarget.prototype.place = function() {
+
+  this.vx = this.speed;
+
+  this.x = getRandom(-(this.radius), -(canvas.width/2));
+  this.y = getRandom(
+    this.radius+fontSize+padding*3,
+    canvas.height-this.radius-bushMaxHeight
+  );
+
+};
+
+var HideTarget = function() {};
+HideTarget.prototype = new Target();
+
+HideTarget.prototype.update = function() {
+
+  if(this.y < canvas.height-bushMaxHeight+this.radius/2) {
+    this.vy = this.speed;
+  }
+  if(this.vy > 0 && this.y > canvas.height) {
+    this.place();
+  }
+
+  this.x += this.vx;
+  this.y += this.vy;
+
+};
+
+HideTarget.prototype.place = function() {
+
+  this.vy = -(this.speed*0.2);
+
+  this.x = getRandom(this.radius, canvas.width-this.radius);
+  this.y = getRandom(
+    canvas.height+this.radius,
+    canvas.height+this.radius+bushMaxHeight
+  );
+
 };

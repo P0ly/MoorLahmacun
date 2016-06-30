@@ -12,6 +12,9 @@ var devmode = true;
 var buschimode = false;
 var time = 20;
 var targets = 5;
+var flyTargets = 3;
+var hideTargets = 3;
+var targetSpeed = 4;
 var bushes = 50;
 var bushSpawn = 2000;
 var bushMaxHeight = 100;
@@ -70,8 +73,4 @@ function isAABBC(x1,y1,w1,h1,x2,y2,w2,h2) {
 function inGameView() {
   if(mouseY > fontSize+padding*3) return true;
   return false;
-}
-
-function addInput(x,y,text,type,canvas,func) {
-  // TODO insert input-tag
 }
