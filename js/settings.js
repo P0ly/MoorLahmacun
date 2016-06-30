@@ -8,8 +8,8 @@
 
 // game mechanic
 var ups = 30;
-var devmode = true;
-var buschimode = false;
+var devmode = false;
+var buschimode = true;
 var time = 20;
 var targets = 5;
 var flyTargets = 3;

@@ -11,6 +11,19 @@
 
 var states = {
 
+  shareUpdate: function() {
+
+    // update input
+    if(mouse) {
+      clicked = false;
+    }
+
+    if(!mouse) {
+      clicked = true;
+    }
+
+  },
+
   update: [
 
     // MENU
@@ -63,14 +76,47 @@ var states = {
 
   ],
 
+  shareRenderBefore: function() {
+
+    if(buschimode) {
+      ctx.drawImage(buschipic,0,fontSize+padding*3,canvas.width,canvas.height);
+    }
+
+    // UI
+    ctx.fillStyle = color;
+    ctx.fillRect(0,0,canvas.width,fontSize+padding*3);
+    ctx.strokeStyle = fontColor;
+    ctx.fillStyle = fontColor;
+    ctx.font = fontSize + 'px ' + font;
+    ctx.strokeText('Moorbusch',padding,fontSize+padding);
+    ctx.fillText(
+      '| Timer: ' + timer + 's  ' + 'Score: ' + score,
+      fontSize*6,fontSize+padding
+    );
+
+  },
+
+  shareRenderAfter: function() {
+
+    if(devmode) {
+      // dev text
+      ctx.fillStyle = 'red';
+      ctx.font = fontSize*0.8 + 'px ' + font;
+      ctx.fillText('FPS: ' + fps,5,fontSize+padding*3+25);
+      ctx.font = fontSize*0.5 + 'px ' + font;
+      ctx.fillText('X: ' + mouseX,5,fontSize+padding*3+fontSize*0.8+25);
+      ctx.fillText('Y: ' + mouseY,5,fontSize+padding*3+fontSize*0.8+35);
+      ctx.fillText('Mouse: ' + mouse,5,fontSize+padding*3+fontSize*0.8+45);
+      ctx.fillText('Clicked: ' + clicked,5,fontSize+padding*3+fontSize*0.8+55);
+      ctx.fillText('Lag: ' + lag + ' ms',5,fontSize+padding*3+fontSize*0.8+65);
+    }
+
+  },
+
   render: [
 
     // MENU
     function() {
-
-      if(buschimode) {
-        ctx.drawImage(buschipic,0,0,canvas.width,canvas.height);
-      }
 
       // render target
       tsarr[flyTargets].draw();
@@ -90,16 +136,13 @@ var states = {
         padding,
         canvas.height/2+padding
       );
+
       bStart.draw();
 
     },
 
     // GAME
     function() {
-
-      if(buschimode) {
-        ctx.drawImage(buschipic,0,0,canvas.width,canvas.height);
-      }
 
       // render targets
       for(var i = 0; i < tsarr.length; i++) {
