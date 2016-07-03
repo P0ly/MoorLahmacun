@@ -71,7 +71,6 @@ Target.prototype.isHit = function() {
 Target.prototype.shareUpdate = function() {
 
   if(this.alive) {
-    // this.isHit();
     this.update();
   } else {
     this.vy = this.speed*4;
@@ -99,6 +98,7 @@ FlyTarget.prototype.update = function() {
 FlyTarget.prototype.place = function() {
 
   this.alive = true;
+  this.vy = 0;
   this.vx = this.speed;
 
   this.x = getRandom(-(this.radius), -(canvas.width/2));
@@ -114,10 +114,10 @@ HideTarget.prototype = new Target();
 
 HideTarget.prototype.update = function() {
 
-  if(this.y < canvas.height-bushMaxHeight-this.radius/2) {
+  if(this.y < canvas.height-bushMaxHeight) {
     this.vy = this.speed;
   }
-  if(this.vy > 0 && this.y > canvas.height) {
+  if(this.vy > 0 && this.y > canvas.height+this.radius*2) {
     this.place();
   }
 

@@ -8,8 +8,8 @@
 
 // game mechanic
 var ups = 30;
-var devmode = true;
-var buschimode = false;
+var devmode = false;
+var buschimode = true;
 var time = 20000;
 var targets = 5;
 var flyTargets = 3;
@@ -84,6 +84,17 @@ function inGameView() {
   return false;
 }
 
+function reset() {
+  clicked = false; // fix -1 point on start bug
+  score = 0;
+  timer = time/1000;
+  // reset targets
+  for(var i = 0; i < tsarr.length; i++) {
+    tsarr[i].place();
+    tsarr[i].alive = true;
+  }
+}
+
 
 // LISTENERS
 
@@ -148,12 +159,7 @@ canvas.addEventListener("touchend", function(e) {
   }
 }, false);
 
-// canvas.addEventListener("touchmove", function(e) { e.preventDefault() }, false);
-
-// el.addEventListener("touchcancel", handleCancel, false);
-// canvas.addEventListener("touchmove", function(e) {
-//
-// }, false);
+canvas.addEventListener("touchmove", function(e) { e.preventDefault() }, false);
 
 // function checkKeyDown(e) {
 //     var keyID = e.keyCode || e.which;

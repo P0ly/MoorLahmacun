@@ -26,8 +26,6 @@ var states = {
     // MENU
     function() {
 
-      // bStart.update();
-
       // update target
       tsarr[flyTargets].shareUpdate();
 
@@ -63,20 +61,12 @@ var states = {
       hits = 0;
 
       // stop
-      timer = time - (Date.now() - startTime);
+      timer = Math.floor((time - (Date.now() - startTime))/1000);
       if(timer <= 0) {
 
         finalScore = score;
-        timer = 0;
-        window.clearInterval(timerID);
         state = 0;
-        clicked = false; // fix -1 point on start bug
-
-        // reset targets
-        for(var i = 0; i < tsarr.length; i++) {
-          tsarr[i].place();
-          tsarr[i].alive = true;
-        }
+        reset();
 
         // reset play-button
         document.getElementById("playbutton").value = "Play";
@@ -107,7 +97,7 @@ var states = {
     ctx.font = fontSize + 'px ' + font;
     ctx.strokeText('Moorbusch',padding,fontSize+padding);
     ctx.fillText(
-      '| Timer: ' + timer + 'ms  ' + 'Score: ' + score,
+      '| Timer: ' + timer + 's  ' + 'Score: ' + score,
       fontSize*6,fontSize+padding
     );
 
@@ -189,8 +179,6 @@ var states = {
         padding,
         canvas.height/2+padding
       );
-
-      // bStart.draw();
 
     },
 
