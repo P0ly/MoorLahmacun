@@ -31,14 +31,27 @@ var states = {
       // update target
       tsarr[flyTargets].shareUpdate();
 
+      // bushes
+      for(var i = 0; i < bsarr.length; i++) {
+        bsarr[i].update();
+      }
+
+      score = 0;
+
     },
 
     // GAME
     function() {
 
-      // update targets
+      // targets
       for(var i = 0; i < tsarr.length; i++) {
+        if(tsarr[i].alive) tsarr[i].isHit();
         tsarr[i].shareUpdate();
+      }
+
+      // bushes
+      for(var i = 0; i < bsarr.length; i++) {
+        bsarr[i].update();
       }
 
       // get -1 point if user fails to hit target
@@ -93,6 +106,12 @@ var states = {
   shareRenderAfter: function() {
 
     if(devmode) {
+
+      // render bushes
+      for(var i = 0; i < bsarr.length; i++) {
+        if(bsarr[i].show) bsarr[i].draw();
+      }
+
       // dev text
       ctx.fillStyle = 'red';
       ctx.font = fontSize*0.8 + 'px ' + font;
@@ -141,11 +160,6 @@ var states = {
       // render target
       tsarr[flyTargets].draw();
 
-      // render bushes
-      for(var i = 0; i < bsarr.length; i++) {
-        bsarr[i].draw();
-      }
-
       // render ui
       // ctx.fillStyle = color;
       // ctx.fillRect(0,canvas.height/2-fontSize*1.3,canvas.width,fontSize*1.3+padding*3);
@@ -167,11 +181,6 @@ var states = {
       // targets
       for(var i = 0; i < tsarr.length; i++) {
         tsarr[i].draw();
-      }
-
-      // bushes
-      for(var i = 0; i < bsarr.length; i++) {
-        bsarr[i].draw();
       }
 
     }

@@ -12,6 +12,7 @@ function Bush(x, y, radius, color) {
   this.radius = radius;
   this.color = color;
   this.show = true;
+  this.lastSpawn = Date.now();
 }
 
 Bush.prototype.draw = function() {
@@ -27,11 +28,14 @@ Bush.prototype.draw = function() {
   }
 };
 
-// IDEA make bushes breakeable
-// Bush.prototype.update = function(id) {
-//   if(getDistance(mouseX,mouseY,this.x,this.y) <= this.radius && mouse && clicked) {
-//     this.show = false;
-//     score++;
-//     window.setTimeout(bsarr[i].show = true, bushSpawn);
-//   }
-// };
+Bush.prototype.update = function(id) {
+  if(Date.now()-this.lastSpawn >= bushSpawn) this.show = true;
+  if(
+    this.show && mouse && clicked &&
+    getDistance(mouseX,mouseY,this.x,this.y) <= this.radius+playerRadius
+  ) {
+    this.show = false;
+    score++;
+    this.lastSpawn = Date.now();
+  }
+};

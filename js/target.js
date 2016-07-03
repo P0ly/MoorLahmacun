@@ -80,7 +80,7 @@ Target.prototype.isHit = function() {
 Target.prototype.shareUpdate = function() {
 
   if(this.alive) {
-    this.isHit();
+    // this.isHit();
     this.update();
   } else {
     this.vy = this.speed*4;

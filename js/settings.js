@@ -30,7 +30,6 @@ var color = 'white';
 var colorHover = '#ccffcc';
 var padding = 5;
 var uiSize = fontSize+padding*3;
-var scoresTTL = 2000;
 
 
 // GLOBAL VAR
