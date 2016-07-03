@@ -14,8 +14,7 @@ var Target = function() {
   this.radius = getRandom(minRadius,maxRadius);
   this.img = buschipic;
   this.speed = targetSpeed;
-  this.alive = true; // TODO die animation
-  // this.placeRandom();
+  this.alive = true;
 };
 
 Target.prototype.draw = function() {
@@ -59,7 +58,6 @@ Target.prototype.isHit = function() {
       this.alive = false;
       score++;
       hits++;
-      this.place();
       return true;
     }
 
@@ -71,7 +69,6 @@ Target.prototype.isHit = function() {
         this.alive = false;
         score++;
         hits++;
-        this.place();
         return true;
       }
     }
@@ -80,11 +77,23 @@ Target.prototype.isHit = function() {
 
 };
 
-// Target.prototype.placeRandom = function() {
-//   // this.radius = getRandom(maxRadius,40);
-//   this.x = getRandom(canvas.width-this.radius,this.radius);
-//   this.y = getRandom(canvas.height-this.radius,this.radius+fontSize+padding*3);
-// };
+Target.prototype.shareUpdate = function() {
+
+  if(this.alive) {
+    this.isHit();
+    this.update();
+  } else {
+    this.vy = this.speed*4;
+    if(this.y >= canvas.height) {
+      this.vy = 0;
+      this.place();
+    }
+  }
+
+  this.x += this.vx;
+  this.y += this.vy;
+
+};
 
 
 var FlyTarget = function() {};
@@ -93,9 +102,6 @@ FlyTarget.prototype = new Target();
 FlyTarget.prototype.update = function() {
 
   if(this.x-this.radius > canvas.width) this.place();
-
-  this.x += this.vx;
-  this.y += this.vy;
 
 };
 
@@ -117,22 +123,19 @@ HideTarget.prototype = new Target();
 
 HideTarget.prototype.update = function() {
 
-  if(this.y < canvas.height-bushMaxHeight+this.radius/2) {
+  if(this.y < canvas.height-bushMaxHeight-this.radius/2) {
     this.vy = this.speed;
   }
   if(this.vy > 0 && this.y > canvas.height) {
     this.place();
   }
 
-  this.x += this.vx;
-  this.y += this.vy;
-
 };
 
 HideTarget.prototype.place = function() {
 
   this.alive = true;
-  this.vy = -(this.speed*0.2);
+  this.vy = -(this.speed*0.5);
 
   this.x = getRandom(this.radius, canvas.width-this.radius);
   this.y = getRandom(

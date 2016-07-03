@@ -29,7 +29,7 @@ var states = {
       bStart.update();
 
       // update target
-      tsarr[flyTargets].update();
+      tsarr[flyTargets].shareUpdate();
 
     },
 
@@ -38,8 +38,7 @@ var states = {
 
       // update targets
       for(var i = 0; i < tsarr.length; i++) {
-        tsarr[i].isHit();
-        tsarr[i].update();
+        tsarr[i].shareUpdate();
       }
 
       // get -1 point if user fails to hit target
@@ -49,21 +48,6 @@ var states = {
         }
       }
       hits = 0;
-
-      // if(
-      //   mousemode && mouse && clicked && inGameView() &&
-      //   getDistance(mouseX,mouseY,this.x,this.y) > this.radius
-      // ) {
-      //   score--;
-      // }
-      // for(var i = 0; i < touches.length; i++) {
-      //   if(
-      //     touchmode && mouse && clicked && inGameView() &&
-      //     getDistance(touches[i].pageX,touches[i].pageY,this.x,this.y) > this.radius
-      //   ) {
-      //     score--;
-      //   }
-      // }
 
       // stop
       timer = time - (Date.now() - startTime);
@@ -77,6 +61,7 @@ var states = {
         // reset targets
         for(var i = 0; i < tsarr.length; i++) {
           tsarr[i].place();
+          tsarr[i].alive = true;
         }
 
       }
@@ -179,12 +164,12 @@ var states = {
     // GAME
     function() {
 
-      // render targets
+      // targets
       for(var i = 0; i < tsarr.length; i++) {
         tsarr[i].draw();
       }
 
-      // render bushes
+      // bushes
       for(var i = 0; i < bsarr.length; i++) {
         bsarr[i].draw();
       }

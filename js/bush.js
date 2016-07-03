@@ -27,6 +27,7 @@ Bush.prototype.draw = function() {
   }
 };
 
+// IDEA make bushes breakeable
 // Bush.prototype.update = function(id) {
 //   if(getDistance(mouseX,mouseY,this.x,this.y) <= this.radius && mouse && clicked) {
 //     this.show = false;

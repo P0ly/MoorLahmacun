@@ -9,7 +9,7 @@
 // game mechanic
 var ups = 30;
 var devmode = true;
-var buschimode = false;
+var buschimode = false; // IDEA make buschimode switchable
 var time = 20000;
 var targets = 5;
 var flyTargets = 3;
@@ -30,6 +30,7 @@ var color = 'white';
 var colorHover = '#ccffcc';
 var padding = 5;
 var uiSize = fontSize+padding*3;
+var scoresTTL = 2000;
 
 
 // GLOBAL VAR
@@ -52,7 +53,7 @@ var tsarr = [];
 var bsarr = [];
 var lag = 0, lagStart = 0;
 var hits = 0;
-var scores = []; // TODO display score point where player clicks
+
 
 // resize canvas
 if(document.body.clientWidth < canvas.width) {
@@ -83,6 +84,7 @@ function inGameView() {
   if(mouseY > fontSize+padding*3) return true;
   return false;
 }
+
 
 // LISTENERS
 

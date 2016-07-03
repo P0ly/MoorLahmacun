@@ -36,4 +36,4 @@ var updateID = window.setInterval(function() {
 
 })();
 
-// TODO restart?
+// IDEA restart?
