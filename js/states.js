@@ -26,7 +26,7 @@ var states = {
     // MENU
     function() {
 
-      bStart.update();
+      // bStart.update();
 
       // update target
       tsarr[flyTargets].shareUpdate();
@@ -66,6 +66,7 @@ var states = {
       timer = time - (Date.now() - startTime);
       if(timer <= 0) {
 
+        finalScore = score;
         timer = 0;
         window.clearInterval(timerID);
         state = 0;
@@ -77,6 +78,9 @@ var states = {
           tsarr[i].alive = true;
         }
 
+        // reset play-button
+        document.getElementById("playbutton").value = "Play";
+
       }
 
     }
@@ -86,7 +90,13 @@ var states = {
   shareRenderBefore: function() {
 
     if(buschimode) {
-      ctx.drawImage(buschipic,0,uiSize,canvas.width,canvas.height);
+      ctx.drawImage(
+        buschipic,
+        canvas.width/4,
+        canvas.height/4,
+        canvas.width/2,
+        canvas.height/2
+      );
     }
 
     // UI
@@ -105,12 +115,12 @@ var states = {
 
   shareRenderAfter: function() {
 
-    if(devmode) {
+    // render bushes
+    for(var i = 0; i < bsarr.length; i++) {
+      if(bsarr[i].show) bsarr[i].draw();
+    }
 
-      // render bushes
-      for(var i = 0; i < bsarr.length; i++) {
-        if(bsarr[i].show) bsarr[i].draw();
-      }
+    if(devmode) {
 
       // dev text
       ctx.fillStyle = 'red';
@@ -148,6 +158,15 @@ var states = {
         ctx.fill();
       }
 
+      // target line
+      tsarr.forEach(function(e,i,arr) {
+        ctx.strokeStyle = 'red';
+        ctx.beginPath();
+        ctx.moveTo(mouseX,mouseY);
+        ctx.lineTo(e.x, e.y);
+        ctx.stroke();
+      });
+
     }
 
   },
@@ -161,17 +180,17 @@ var states = {
       tsarr[flyTargets].draw();
 
       // render ui
-      // ctx.fillStyle = color;
-      // ctx.fillRect(0,canvas.height/2-fontSize*1.3,canvas.width,fontSize*1.3+padding*3);
-      // ctx.fillStyle = fontColor;
-      // ctx.font = fontSize*1.3 + 'px ' + font;
-      // ctx.fillText(
-      //   'Press "Play" to play!',
-      //   padding,
-      //   canvas.height/2+padding
-      // );
+      ctx.fillStyle = color;
+      ctx.fillRect(0,canvas.height/2-fontSize*1.3,canvas.width,fontSize*1.3+padding*3);
+      ctx.fillStyle = fontColor;
+      ctx.font = fontSize*1.3 + 'px ' + font;
+      ctx.fillText(
+        'Your Score: ' + finalScore,
+        padding,
+        canvas.height/2+padding
+      );
 
-      bStart.draw();
+      // bStart.draw();
 
     },
 

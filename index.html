@@ -11,7 +11,7 @@
 			<h1>Moorbusch</h1>
 		</div>
 		<div id="site">
-			<canvas id="game" width="500" height="500"></canvas>
+			<canvas id="game" class="ui" width="500" height="500"></canvas>
 			<script type="text/javascript" src="js/settings.js"></script>
 			<script type="text/javascript" src="js/target.js"></script>
 			<script type="text/javascript" src="js/bush.js"></script>
@@ -19,6 +19,12 @@
 			<script type="text/javascript" src="js/states.js"></script>
 			<script type="text/javascript" src="js/game.js"></script>
 			<script type="text/javascript" src="js/loop.js"></script>
+			<div id="inputs" class="ui">
+				<input id="playbutton" class="ui-input" type="button" onclick="start()" value="Play"/>
+			</div>
+		</div>
+		<div id="footer" class="ui">
+			<p>Copyright by Timo Häfner | Now Touchable!</p>
 		</div>
 	</body>
 </html>

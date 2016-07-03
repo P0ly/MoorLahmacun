@@ -38,15 +38,6 @@ Target.prototype.draw = function() {
     ctx.fill();
   }
 
-  if(devmode) {
-    // target line
-    ctx.strokeStyle = 'red';
-    ctx.beginPath();
-    ctx.moveTo(mouseX,mouseY);
-    ctx.lineTo(this.x, this.y);
-    ctx.stroke();
-  }
-
 };
 
 Target.prototype.isHit = function() {

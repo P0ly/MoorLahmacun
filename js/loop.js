@@ -35,5 +35,3 @@ var updateID = window.setInterval(function() {
   window.requestAnimationFrame(render);
 
 })();
-
-// IDEA restart?

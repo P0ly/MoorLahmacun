@@ -35,7 +35,7 @@ Bush.prototype.update = function(id) {
     getDistance(mouseX,mouseY,this.x,this.y) <= this.radius+playerRadius
   ) {
     this.show = false;
-    score++;
+    hits++;
     this.lastSpawn = Date.now();
   }
 };

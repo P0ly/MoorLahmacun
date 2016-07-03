@@ -45,21 +45,21 @@ for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
 }
 
 // play-button
-var bStart = new Button(
-  padding,
-  canvas.height/2-fontSize/2+padding,
-  canvas.width+padding,
-  50,
-  'Play',
-  function() {
-    state = 1;
-    score = 0;
-    startTime = Date.now();
-    // timer = time;
-    // timerID = window.setInterval(function() {
-    //   timer--;
-    // },1000);
-});
+// var bStart = new Button(
+//   padding,
+//   canvas.height/2-fontSize/2+padding,
+//   canvas.width+padding,
+//   50,
+//   'Play',
+//   function() {
+//     state = 1;
+//     score = 0;
+//     startTime = Date.now();
+//     // timer = time;
+//     // timerID = window.setInterval(function() {
+//     //   timer--;
+//     // },1000);
+// });
 
 // START
 // render();

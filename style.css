@@ -6,10 +6,11 @@ html, body {
   margin: 0;
   display: block;
   font-family: monospace;
+  color: #33CC33;
 }
 
 #header {
-  width: 99%;
+  width: 98%;
   padding: 1%;
   background-color: white;
   box-shadow: 0px 1px 3px 0px rgba(100,100,100,75);
@@ -17,15 +18,20 @@ html, body {
 
 #header h1 {
   width: 100%;
-  color: #33CC33;
   margin: 0;
+  padding: 0;
   font-size: 30px;
   text-align: center;
 }
 
+.ui {
+  background-color: white;
+  box-shadow: 0px 1px 3px 0px rgba(100,100,100,75);
+  margin-top: 10px;
+}
+
 #site {
   width: 100%;
-  margin-top: 10px;
   padding: 0;
   text-align: center;
 }
@@ -33,4 +39,37 @@ html, body {
 #game {
   background-color: skyblue;
   box-shadow: 1px 1px 3px 0px rgba(100,100,100,75);
+}
+
+#inputs {
+  width: 100%;
+}
+
+.ui-input {
+  background-color: white;
+  color: #33CC33;
+  font-size: 40px;
+  border: 1px solid #33CC33;
+  box-shadow: 1px 1px 3px 0px rgba(100,100,100,75);
+  padding: 10px;
+}
+
+input[type="button"] {
+  width: 50%;
+  margin: 10px;
+}
+
+input[type="button"]:hover {
+  background-color: #ccffcc;
+}
+
+#footer {
+  width: 100%;
+}
+
+#footer p {
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+  font-size: 16px;
 }

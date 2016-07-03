@@ -9,7 +9,7 @@
 // game mechanic
 var ups = 30;
 var devmode = true;
-var buschimode = false; // IDEA make buschimode switchable
+var buschimode = true;
 var time = 20000;
 var targets = 5;
 var flyTargets = 3;
@@ -20,7 +20,7 @@ var bushSpawn = 2000;
 var bushMaxHeight = 100;
 var maxRadius = 30;
 var minRadius = 25;
-var playerRadius = 25;
+var playerRadius = 15;
 
 // ui
 var font = 'monospace';
@@ -37,8 +37,8 @@ var canvas = document.getElementById('game');
 var ctx = canvas.getContext('2d');
 var mouse = false, mouseX = 0, mouseY = 0, clicked = false;
 var touch = false, touches = [];
-var mousemode = false, touchmode = false;
-var score = 0, timer = 0;
+var mousemode = true, touchmode = false;
+var score = 0, finalScore = 0, timer = 0;
 var state = 0, fps = 0, frame = 0;
 var timerID = 0;
 var startTime = 0;
