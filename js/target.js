@@ -54,11 +54,28 @@ Target.prototype.isHit = function() {
 
     if(
       mouse && inGameView() && clicked &&
-      getDistance(mouseX,mouseY,this.x,this.y) <= this.radius
+      getDistance(mouseX,mouseY,this.x,this.y) <= this.radius+playerRadius
     ) {
-      this.alve = false;
+      this.alive = false;
+      score++;
+      hits++;
+      this.place();
       return true;
     }
+
+    for(var i = 0; i < touches.length; i++) {
+      if(
+        touch && inGameView() && clicked &&
+        getDistance(touches[i].pageX,touches[i].pageY,this.x,this.y) <= this.radius+playerRadius
+      ) {
+        this.alive = false;
+        score++;
+        hits++;
+        this.place();
+        return true;
+      }
+    }
+
     return false;
 
 };
@@ -84,6 +101,7 @@ FlyTarget.prototype.update = function() {
 
 FlyTarget.prototype.place = function() {
 
+  this.alive = true;
   this.vx = this.speed;
 
   this.x = getRandom(-(this.radius), -(canvas.width/2));
@@ -113,6 +131,7 @@ HideTarget.prototype.update = function() {
 
 HideTarget.prototype.place = function() {
 
+  this.alive = true;
   this.vy = -(this.speed*0.2);
 
   this.x = getRandom(this.radius, canvas.width-this.radius);
