@@ -38,7 +38,7 @@ var ctx = canvas.getContext('2d');
 var mouse = false, mouseX = 0, mouseY = 0, clicked = false;
 var touch = false, touches = [];
 var mousemode = true, touchmode = false;
-var score = 0, finalScore = 0, timer = 0;
+var score = 0, finalScore = 0, highscore = 0, timer = 0;
 var state = 0, fps = 0, frame = 0;
 var timerID = 0;
 var startTime = 0;

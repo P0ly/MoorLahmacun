@@ -34,7 +34,7 @@ var states = {
         bsarr[i].update();
       }
 
-      score = 0;
+      score = finalScore;
 
     },
 
@@ -65,6 +65,7 @@ var states = {
       if(timer <= 0) {
 
         finalScore = score;
+        if(finalScore > highscore) highscore = finalScore;
         state = 0;
         reset();
 
@@ -175,7 +176,7 @@ var states = {
       ctx.fillStyle = fontColor;
       ctx.font = fontSize*1.3 + 'px ' + font;
       ctx.fillText(
-        'Your Score: ' + finalScore,
+        'Your Highscore: ' + highscore,
         padding,
         canvas.height/2+padding
       );
