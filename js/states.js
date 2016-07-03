@@ -42,11 +42,13 @@ var states = {
         tsarr[i].update();
       }
 
-      // get -1 point if user fails to hit target // TODO buggy clicked=false=true?
-      // if(mouse || touch && inGameView() && clicked && hits <= 0) {
-      //   score--;
-      // }
-      // hits = 0;
+      // get -1 point if user fails to hit target
+      if(mouse || touch) {
+        if(inGameView() && clicked && hits <= 0) {
+          score--;
+        }
+      }
+      hits = 0;
 
       // if(
       //   mousemode && mouse && clicked && inGameView() &&
