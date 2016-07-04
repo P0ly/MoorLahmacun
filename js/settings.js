@@ -15,7 +15,6 @@ var targets = 5;
 var flyTargets = 3;
 var hideTargets = 3;
 var targetSpeed = 4;
-var bushes = 46;
 var bushSpawn = 2000;
 var bushMaxHeight = 100;
 var maxRadius = 30;
@@ -53,11 +52,12 @@ var bsarr = [];
 var lag = 0, lagStart = 0;
 var hits = 0;
 
-
 // resize canvas
 if(document.body.clientWidth < canvas.width) {
   canvas.width = document.body.clientWidth;
 }
+
+var bushes = Math.floor((canvas.width/minRadius)*2);
 
 // GLOBAL FUNC
 

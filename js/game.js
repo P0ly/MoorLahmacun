@@ -18,9 +18,9 @@ for(var i = flyTargets; i < hideTargets+flyTargets; i++) {
 
 // bushes
 for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
-  if(i*maxRadius % canvas.width == 100) {
+  if(i == Math.floor(bushes/2)) {
     w = 0;
-    r = (minRadius*r > bushMaxHeight) ? 0 : r+1;
+    r++;
   }
   bsarr[i] = new Bush(
     w*maxRadius,
