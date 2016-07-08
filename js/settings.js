@@ -52,12 +52,23 @@ var bsarr = [];
 var lag = 0, lagStart = 0;
 var hits = 0;
 
-// resize canvas
+// RESIZE
+
+// canvas
 if(document.body.clientWidth < canvas.width) {
   canvas.width = document.body.clientWidth;
 }
+if(canvas.height + canvas.offsetTop > window.innerHeight) {
+  canvas.height = window.innerHeight - canvas.offsetTop - 80;
+}
 
+// number of bushes
 var bushes = Math.floor((canvas.width/minRadius)*2);
+
+// font
+if(canvas.width < 500) {
+  fontSize = 5 * canvas.width / 100 ;
+}
 
 // GLOBAL FUNC
 
