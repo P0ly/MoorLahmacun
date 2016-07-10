@@ -36,6 +36,20 @@ html, body {
   text-align: center;
 }
 
+#info ul {
+  margin: 0;
+  padding: 10px;
+}
+
+#info li {
+  padding: 0;
+  padding-right: 20px;
+  margin: 0;
+  display: inline;
+  list-style: none;
+  font-size: 22px;
+}
+
 #game {
   background-color: skyblue;
   box-shadow: 1px 1px 3px 0px rgba(100,100,100,75);
