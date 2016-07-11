@@ -1,5 +1,5 @@
 /*
-  Moorbusch
+  Moorlahmacun
 
   Copyright by Timo Häfner
 */
@@ -9,7 +9,7 @@
 // game mechanic
 var ups = 30;
 var devmode = false;
-var buschimode = true;
+var lahmacunmode = true;
 var time = 20000;
 var targets = 5;
 var flyTargets = 3;
@@ -47,8 +47,10 @@ var fpsCounter = window.setInterval(function() {
   fps = frame;
   frame = 0;
 },1000);
-var buschipic = new Image();
-buschipic.src = 'img/buschi-60x60.png';
+var lahmacunpic = new Image();
+lahmacunpic.src = 'img/lahmacun-60x60.png';
+var salatpic = new Image();
+salatpic.src = 'img/salat-60x60.png';
 var tsarr = [];
 var bsarr = [];
 var lag = 0, lagStart = 0;
@@ -208,15 +210,15 @@ var Target = function() {
   this.y = 0;
   this.vy = 0;
   this.vx = 0;
-  this.img = buschipic;
-  this.radius = buschipic.width/2;
+  this.img = lahmacunpic;
+  this.radius = lahmacunpic.width/2;
   this.speed = targetSpeed;
   this.alive = true;
 };
 
 Target.prototype.draw = function() {
 
-  if(buschimode) {
+  if(lahmacunmode) {
     ctx.drawImage(
       this.img,
       this.x-this.radius,
@@ -269,8 +271,8 @@ Target.prototype.shareUpdate = function() {
     this.update();
   } else {
     this.speed *= 1.1;
-    this.vy = this.speed*4;
-    if(this.y >= canvas.height) {
+    this.vy = -this.speed*4;
+    if(this.y <= -this.radius) {
       this.vy = 0;
       this.place();
     }
@@ -346,20 +348,27 @@ function Bush(x, y, radius, color) {
   this.color = color;
   this.show = true;
   this.lastSpawn = Date.now();
+  this.img = salatpic;
 
 }
 
 Bush.prototype.draw = function() {
 
   if(this.show) {
-    ctx.fillStyle = 'darkgreen';
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
-    ctx.fill();
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.radius*0.9,0,Math.PI*2,true);
-    ctx.fill();
+    // ctx.fillStyle = 'darkgreen';
+    // ctx.beginPath();
+    // ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
+    // ctx.fill();
+    // ctx.fillStyle = this.color;
+    // ctx.beginPath();
+    // ctx.arc(this.x,this.y,this.radius*0.9,0,Math.PI*2,true);
+    // ctx.fill();
+
+    ctx.drawImage(
+      this.img,
+      this.x-this.radius,
+      this.y-this.radius
+    );
   }
 
 };
@@ -466,32 +475,6 @@ var states = {
     }
 
   ],
-
-  shareRenderBefore: function() {
-
-    // if(buschimode) {
-    //   ctx.drawImage(
-    //     buschipic,
-    //     canvas.width/4,
-    //     canvas.height/4,
-    //     canvas.width/2,
-    //     canvas.height/2
-    //   );
-    // }
-
-    // UI
-    // ctx.fillStyle = color;
-    // ctx.fillRect(0,0,canvas.width,uiSize);
-    // ctx.strokeStyle = fontColor;
-    // ctx.fillStyle = fontColor;
-    // ctx.font = fontSize + 'px ' + font;
-    // ctx.strokeText('Moorbusch',padding,fontSize+padding);
-    // ctx.fillText(
-    //   '| Timer: ' + timer + 's  ' + 'Score: ' + score,
-    //   fontSize*6,fontSize+padding
-    // );
-
-  },
 
   shareRenderAfter: function() {
 
@@ -640,7 +623,6 @@ var updateID = window.setInterval(function() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  states.shareRenderBefore();
   states.render[state]();
   states.shareRenderAfter();
 
