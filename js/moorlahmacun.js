@@ -113,10 +113,6 @@ function reset() {
 
 // LISTENERS
 
-// keys
-// document.addEventListener('keydown', checkKeyDown, false);
-// document.addEventListener('keyup', checkKeyUp, false);
-
 // mouse
 canvas.addEventListener('mousedown', function() {
   mousemode = true;
@@ -174,23 +170,7 @@ canvas.addEventListener("touchend", function(e) {
   }
 }, false);
 
-canvas.addEventListener("touchmove", function(e) { e.preventDefault() }, false);
-
-// function checkKeyDown(e) {
-//     var keyID = e.keyCode || e.which;
-//     if (keyID === 32) { // Space
-//         // input.space = true;
-//         e.preventDefault();
-//     }
-// }
-//
-// function checkKeyUp(e) {
-//     var keyID = e.keyCode || e.which;
-//     if (keyID === 32) { // Space
-//         // input.space = false;
-//         e.preventDefault();
-//     }
-// }
+//canvas.addEventListener("touchmove", function(e) { e.preventDefault() }, false);
 
 
 // BUTTON
@@ -544,13 +524,13 @@ var states = {
 
       // render ui
       ctx.fillStyle = color;
-      ctx.fillRect(0,canvas.height/2-fontSize*1.3,canvas.width,fontSize*1.3+padding*3);
+      ctx.fillRect(0,canvas.height/2-fontSize*1.3-fontSize,canvas.width,fontSize*1.3+padding*3);
       ctx.fillStyle = fontColor;
       ctx.font = fontSize*1.3 + 'px ' + font;
       ctx.fillText(
         'Your Highscore: ' + highscore,
         padding,
-        canvas.height/2+padding
+        canvas.height/2+padding-fontSize
       );
 
     },
