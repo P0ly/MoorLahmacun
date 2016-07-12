@@ -17,6 +17,7 @@ var hideTargets = 3;
 var targetSpeed = 4;
 var bushSpawn = 2000;
 var bushMaxHeight = 100;
+var busches = 0;
 var maxRadius = 30;
 var minRadius = 25;
 var playerRadius = 15;
@@ -56,23 +57,6 @@ var bsarr = [];
 var lag = 0, lagStart = 0;
 var hits = 0;
 
-// RESIZE
-
-// canvas
-if(document.body.clientWidth < canvas.width) {
-  canvas.width = document.body.clientWidth;
-}
-if(canvas.height + canvas.offsetTop > window.innerHeight) {
-  canvas.height = window.innerHeight - canvas.offsetTop - 80;
-}
-
-// number of bushes
-var bushes = Math.floor((canvas.width/minRadius)*2);
-
-// font
-if(canvas.width < 500) {
-  fontSize = 5 * canvas.width / 100 ;
-}
 
 // GLOBAL FUNC
 
@@ -109,6 +93,48 @@ function reset() {
     tsarr[i].alive = true;
   }
 }
+
+function resize() {
+
+  // canvas
+  if(document.body.clientWidth < canvas.width) {
+    canvas.width = document.body.clientWidth;
+  }
+
+  if(canvas.height + canvas.offsetTop > window.innerHeight) {
+    canvas.height =
+      window.innerHeight - (window.outerHeight-window.innerHeight)
+      - canvas.offsetTop - 80;
+  }
+
+  // number of bushes
+  bushes = Math.floor((canvas.width/minRadius)*2);
+
+  // font
+  if(canvas.width < 500) {
+    fontSize = 5 * canvas.width / 100 ;
+  }
+
+  // bushes
+  for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
+    if(i == Math.floor(bushes/2)) {
+      w = 0;
+      r++;
+    }
+    bsarr[i] = new Bush(
+      w*maxRadius,
+      canvas.height-minRadius*r,
+      getRandom(minRadius*1.2,maxRadius),
+      'rgb('+
+        getRandom(50,100)+','+
+        getRandom(225,255)+','+
+        getRandom(50,100)+
+      ')'
+    );
+  }
+
+}
+resize();
 
 
 // LISTENERS
@@ -170,7 +196,10 @@ canvas.addEventListener("touchend", function(e) {
   }
 }, false);
 
-//canvas.addEventListener("touchmove", function(e) { e.preventDefault() }, false);
+canvas.addEventListener("touchmove", function(e) { e.preventDefault() }, false);
+
+// RESIZE
+window.onresize = resize;
 
 
 // BUTTON
@@ -560,24 +589,6 @@ for(var i = 0; i < flyTargets; i++) {
 for(var i = flyTargets; i < hideTargets+flyTargets; i++) {
   tsarr[i] = new HideTarget();
   tsarr[i].place();
-}
-
-// bushes
-for(var i = 0,w = 0, r = 1; i < bushes; i++,w++) {
-  if(i == Math.floor(bushes/2)) {
-    w = 0;
-    r++;
-  }
-  bsarr[i] = new Bush(
-    w*maxRadius,
-    canvas.height-minRadius*r,
-    getRandom(minRadius*1.2,maxRadius),
-    'rgb('+
-      getRandom(50,100)+','+
-      getRandom(225,255)+','+
-      getRandom(50,100)+
-    ')'
-  );
 }
 
 
